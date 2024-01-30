@@ -1,0 +1,56 @@
+import zipfile
+import os
+import datetime
+import time
+import re
+from pathlib import Path
+
+
+#mi_zip = zipfile.ZipFile('Proyecto+Dia+9.zip', 'r')
+#mi_zip.extractall('Extracción')
+
+ruta = 'C:\\Users\\felipe.rico\\Desktop\\CURSOS\\UDEMY. Python TOTAL - Programador Avanzado en 16 días\\DÍA 9\\Extracción\\Mi_Gran_Directorio'
+
+lista_numeros = []
+lista_archivos = []
+
+
+def busqueda(texto):
+    patron = r'N\D{3}-\d{5}'
+    return re.search(patron, texto)
+
+def repaso_carps():
+    for carpetas, subcarpetas, archivos in os.walk(ruta):
+        for a in archivos:
+            ruta_archivo = Path(carpetas, a)
+            lectura = ruta_archivo.open('r')
+            texto = lectura.read()
+            if busqueda(texto):
+                lista_archivos.append(a)
+                lista_numeros.append(busqueda(texto).group())
+            lectura.close()
+
+
+
+
+def horas():
+    hora_actual = datetime.datetime.now()
+    dia_actual = hora_actual.day
+    mes_actual = hora_actual.month
+    ano_actual = hora_actual.year
+    print(f'Fecha de búsqueda: {dia_actual}/{mes_actual}/{ano_actual}')
+
+def funcion():
+    inicio = time.time()
+    repaso_carps()
+    print('-'*25)
+    horas()
+    print('\nARCHIVO\t\t\tNRO. SERIE\n-------\t\t\t----------')
+    for archivo, numero in zip(lista_archivos, lista_numeros):
+        print(f'{archivo}\t{numero}')
+    print(f'\nNúmeros encontrados: {len(lista_archivos)}')
+    final = time.time()
+    duracion = final - inicio
+    print(f'Duración de la búsqueda: {duracion} segundos')
+
+funcion()
